@@ -1274,6 +1274,12 @@ public class HtmlParserTest {
         assertEquals("A Certain Kind of Test", doc.head().select("title").text());
     }
 
+    @Test public void handlesInvalidHtmlInHead() throws IOException {
+        String in = "<html><head><input type=\"hidden\"/><title>Page title</title></head><body></body></html>";
+        Document doc = Jsoup.parse(new ByteArrayInputStream(in.getBytes()), null, "");
+        assertEquals("Page title", doc.head().select("title").text());
+    }
+
     @Test public void fallbackToUtfIfCantEncode() throws IOException {
         // that charset can't be encoded, so make sure we flip to utf
 

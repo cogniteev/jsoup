@@ -145,6 +145,16 @@ enum HtmlTreeBuilderState {
                     } else if (name.equals("head")) {
                         tb.error(this);
                         return false;
+                    } else if (name.equals("iframe")) {
+                        // be more lenient than true W3C because a bunch of trackers may add iframein head
+                        // which will break the title/meta extraction whereas it works on browsers
+                        tb.error(this);
+                        tb.insertCharacterNode(new Token.Character().data(t.toString()));
+                        return true;
+                    } else if (name.equals("input")) {
+                        tb.error(this);
+                        tb.insertElementFor(start);
+                        return true;
                     } else if (name.equals("template")) {
                         tb.insertElementFor(start);
                         tb.insertMarkerToFormattingElements();
